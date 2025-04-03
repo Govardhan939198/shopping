@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Feedback - Urban Collection</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <header>
+        <div class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: mediumaquamarine;">
+            <h1>Urban Collection</h1>
+            <nav>
+                <ul style="display: flex; list-style: none; gap: 20px;">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section style="text-align: center; padding: 20px;">
+        <h2>Feedback Form</h2>
+        <p>We appreciate your feedback! Please fill out the form below.</p>
+        
+        <form id="feedbackForm" style="max-width: 500px; margin: 0 auto; text-align: left;">
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required style="width: 100%; padding: 10px; margin: 10px 0;">
+
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required style="width: 100%; padding: 10px; margin: 10px 0;">
+
+            <label for="message">Your Feedback:</label>
+            <textarea id="message" name="message" rows="5" required style="width: 100%; padding: 10px; margin: 10px 0;"></textarea>
+
+            <button type="submit" style="padding: 10px 20px; background-color: mediumaquamarine; border: none; color: white; cursor: pointer;">Submit</button>
+        </form>
+    </section>
+
+    <section id="contact" style="text-align: center; margin-top: 50px; padding: 20px; background-color: #f4f4f4;">
+        <h2>Contact Us</h2>
+        <p>📞 Phone: <strong>9398473922</strong></p>
+        <p>📧 Email: support@urbancollection.com</p>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Urban Collection. All rights reserved.</p>
+    </footer>
+</body>
+</html>

@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Orders - Urban Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        // Load Orders from LocalStorage
+        function loadOrders() {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let ordersContainer = document.getElementById("ordersList");
+
+            if (orders.length === 0) {
+                ordersContainer.innerHTML = "<p>No orders placed yet.</p>";
+                return;
+            }
+
+            ordersContainer.innerHTML = ""; // Clear previous content
+            orders.forEach((order, index) => {
+                let orderItem = document.createElement("div");
+                orderItem.className = "order-item";
+                orderItem.style = "border: 1px solid #ddd; padding: 10px; margin: 10px; text-align: center; background: #fff;";
+
+                orderItem.innerHTML = `
+                    <img src="${order.image}" alt="${order.itemName}" style="width: 100px; height: auto;">
+                    <h3>${order.itemName}</h3>
+                    <p>Price: ₹${order.price}</p>
+                    <button onclick="payNow(${index})" style="background: green; color: white; padding: 5px 10px; border: none; cursor: pointer;">Pay Now</button>
+                `;
+
+                ordersContainer.appendChild(orderItem);
+            });
+        }
+
+        // Pay Now Function - Move Order to Cart
+        function payNow(orderIndex) {
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            let selectedOrder = orders[orderIndex];
+
+            if (selectedOrder) {
+                cart.push(selectedOrder);
+                localStorage.setItem("cart", JSON.stringify(cart));
+
+                // Remove from orders
+                orders.splice(orderIndex, 1);
+                localStorage.setItem("orders", JSON.stringify(orders));
+
+                alert("Item added to cart. Proceed to checkout.");
+                loadOrders(); // Reload the orders list
+            }
+        }
+
+        window.onload = loadOrders;
+    </script>
+</head>
+<body>
+    <header>
+        <div class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: mediumaquamarine;">
+            <h1>Urban Collection</h1>
+            <nav>
+                <ul style="display: flex; list-style: none; gap: 20px;">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="orders.html">Orders</a></li>
+                    <li><a href="cart.html">Cart</a></li>
+                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section style="text-align: center; padding: 20px;">
+        <h2>Your Orders</h2>
+        <div id="ordersList" style="display: flex; flex-wrap: wrap; justify-content: center;"></div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Urban Collection. All rights reserved.</p>
+    </footer>
+</body>
+</html>

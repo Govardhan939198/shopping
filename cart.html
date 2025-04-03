@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Cart - Urban Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function loadCart() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            let cartSection = document.getElementById("cart-items");
+            let totalPrice = 0;
+            let totalItems = 0;
+
+            cartSection.innerHTML = ""; // Clear previous content
+
+            if (cart.length === 0) {
+                cartSection.innerHTML = "<p>Your cart is empty.</p>";
+                document.getElementById("total-price").innerText = "₹0";
+                document.getElementById("total-items").innerText = "Total Items: 0";
+                return;
+            }
+
+            cart.forEach((item, index) => {
+                totalPrice += item.price * item.quantity;
+                totalItems += item.quantity;
+
+                cartSection.innerHTML += `
+                    <div class="cart-item" style="display: flex; align-items: center; gap: 20px; padding: 10px; border-bottom: 1px solid #ddd;">
+                        <img src="${item.image}" alt="${item.itemName}" style="width: 80px; height: auto;">
+                        <p style="flex-grow: 1;">${item.itemName} - ₹${item.price} x ${item.quantity}</p>
+                        <button onclick="removeFromCart(${index})" style="background-color: red; color: white; border: none; padding: 5px 10px;">Remove</button>
+                    </div>
+                `;
+            });
+
+            document.getElementById("total-price").innerText = `₹${totalPrice.toFixed(2)}`;
+            document.getElementById("total-items").innerText = `Total Items: ${totalItems}`;
+        }
+
+        function removeFromCart(index) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.splice(index, 1);
+            localStorage.setItem("cart", JSON.stringify(cart));
+            loadCart(); // Reload cart
+        }
+
+        function proceedToPayment() {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+
+            if (cart.length === 0) {
+                alert("Your cart is empty. Add items before proceeding.");
+                return;
+            }
+
+            let totalAmount = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            let totalItems = cart.reduce((sum, item) => sum + item.quantity, 0);
+
+            localStorage.setItem("cartTotal", totalAmount.toFixed(2)); // ✅ Save total price
+            localStorage.setItem("cartItemCount", totalItems); // ✅ Save total items
+
+            window.location.href = "payment.html";
+        }
+
+        window.onload = loadCart;
+    </script>
+</head>
+<body>
+    <header>
+        <div class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: mediumaquamarine;">
+            <h1>Urban Collection</h1>
+            <nav>
+                <ul style="display: flex; list-style: none; gap: 20px;">
+                    <li><a href="index.html">Home</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <section id="cart" class="cart-section">
+        <h2>Your Cart</h2>
+        <div id="cart-items"></div>
+        <h3 id="total-items">Total Items: 0</h3> <!-- Display total items -->
+        <h3>Total Price: <span id="total-price">₹0</span></h3> <!-- Display total price -->
+        <button onclick="proceedToPayment()" style="background-color: mediumaquamarine; color: white; padding: 10px 20px; border: none; cursor: pointer;">
+            Proceed to Payment
+        </button>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Urban Collection. All rights reserved.</p>
+    </footer>
+</body>
+</html>

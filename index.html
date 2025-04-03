@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Urban Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Fixed position footer at bottom right */
+        footer {
+            position: fixed;
+            bottom: 10px;
+            right: 20px;
+            font-size: 14px;
+            color: #555;
+        }
+    </style>
+    <script>
+        // Function to Add Items to Cart & Orders
+        function addToCart(itemName, price, image) {
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            cart.push({ itemName, price, image });
+            localStorage.setItem("cart", JSON.stringify(cart));
+
+            let orders = JSON.parse(localStorage.getItem("orders")) || [];
+            orders.push({ itemName, price, image });
+            localStorage.setItem("orders", JSON.stringify(orders));
+
+            alert(itemName + " has been added to your cart.");
+        }
+
+        // Function to Filter Collections
+        function searchCollections() {
+            let query = document.getElementById("searchBar").value.toLowerCase();
+            let items = document.querySelectorAll(".collection-item");
+
+            items.forEach(item => {
+                let name = item.getAttribute("data-name").toLowerCase();
+                item.style.display = name.includes(query) ? "block" : "none";
+            });
+        }
+    </script>
+</head>
+<body>
+    <header>
+        <div class="navbar" style="display: flex; justify-content: space-between; align-items: center; padding: 20px; background-color: mediumaquamarine;">
+            <h1>Urban Collection</h1>
+            <nav>
+                <ul style="display: flex; list-style: none; gap: 20px;">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="orders.html">Orders</a></li>
+                    <li><a href="feedback.html">Feedback</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </nav>
+            <div class="user-options" style="display: flex; gap: 20px;">
+                <a href="cart.html">Cart</a>
+            </div>
+        </div>
+    </header>
+
+    <section id="collections" class="collections" style="text-align: center;">
+        <h2>Our Collections</h2>
+
+        <!-- 🔍 Search Bar -->
+        <input type="text" id="searchBar" onkeyup="searchCollections()" placeholder="Search collections..." style="padding: 10px; width: 80%; max-width: 400px; margin-bottom: 20px;">
+
+        <div class="collection-grid" style="display: grid; grid-template-columns: repeat(4, 1fr); gap: 20px;">
+            <script>
+                const collections = [
+                    { name: "April Collection", price: 499, image: "ac.jpeg" },
+                    { name: "Black Minimal", price: 599, image: "boat.jpg" },
+                    { name: "Gradient Collection", price: 699, image: "fridge1.jpeg" },
+                    { name: "Street Wear", price: 799, image: "tool.jpg" },
+                    { name: "Casual Look", price: 899, image: "noise.jpeg" },
+                    { name: "Monochrome Printer", price: 5999, image: "mixer.jpg" },
+                    { name: "CASEOLOGY Neon Pop", price: 1099, image: "salebig.jpg" },
+                    { name: "Washing Machine", price: 21999, image: "washing machine.jpeg" },
+                    { name: "Realme GT-2", price: 36999, image: "phone.jpeg" },
+                    { name: "Cycle", price: 1399, image: "cycle.webp" },
+                    { name: "Samsung Tv 64 inch", price: 24999, image: "tv.webp" },
+                    { name: "Generator 15kva", price: 149999, image: "gen.webp" }
+                ];
+
+                collections.forEach(collection => {
+                    document.write(`
+                        <div class="collection-item" data-name="${collection.name}" style="border: 1px solid #ddd; padding: 10px; text-align: center; background: #fff; box-shadow: 0px 0px 5px rgba(0,0,0,0.1);">
+                            <img src="${collection.image}" alt="${collection.name}" style="width: 100%; height: auto;">
+                            <h3>${collection.name}</h3>
+                            <p>Price: ₹${collection.price}</p>
+                            <button onclick="addToCart('${collection.name}', ${collection.price}, '${collection.image}')">Add to Cart</button>
+                        </div>
+                    `);
+                });
+            </script>
+        </div>
+    </section>
+
+    <section id="contact" style="text-align: center; margin-top: 50px; padding: 20px; background-color: #f4f4f4;">
+        <h2>Contact Us</h2>
+        <p>📞 Phone: <strong>9398473922</strong></p>
+        <p>📧 Email: support@urbancollection.com</p>
+    </section>
+
+    <footer>
+        &copy; 2025 Urban Collection. All rights reserved.
+    </footer>
+</body>
+</html>

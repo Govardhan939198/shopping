@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Merchant Payment - PayPal & UPI</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        header {
+            background-color: mediumaquamarine;
+            color: white;
+            padding: 10px;
+        }
+
+        .payment-options {
+            background: white;
+            margin: 20px auto;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+        }
+
+        .payment-method {
+            margin-bottom: 20px;
+        }
+
+        button {
+            background-color: mediumaquamarine;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: mediumaquamarine;
+        }
+    </style>
+    <script>
+        function getCartTotal() {
+            // Fetch cart from localStorage
+            let cart = JSON.parse(localStorage.getItem("cart")) || [];
+            
+            // Calculate total price
+            let total = cart.reduce((sum, item) => sum + (item.price * item.quantity), 0);
+            
+            return total.toFixed(2); // Returns total with 2 decimal places
+        }
+
+        function updatePaymentInfo() {
+            let totalAmount = getCartTotal(); // Get total amount
+            
+            if (totalAmount === "0.00") {
+                alert("Your cart is empty. Please add items before proceeding.");
+                return;
+            }
+
+            document.getElementById("total-amount").innerText = `Total Amount: ₹${totalAmount}`;
+            
+            // UPI Payment
+            let upiID = "9398473922-2@ibl";
+            let upiDeepLink = `upi://pay?pa=${upiID}&pn=UrbanCollection&mc=1234&tid=9876543210&tr=TXN12345&tn=UrbanCollection Payment&am=${totalAmount}&cu=INR`;
+
+            let qrCodeURL = `https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=${encodeURIComponent(upiDeepLink)}`;
+            document.getElementById("upi-qr").src = qrCodeURL;
+            document.getElementById("upi-link").href = upiDeepLink;
+
+            // PayPal Payment
+            document.getElementById("paypal-btn").setAttribute("onclick", `sendPayPalRequest(${totalAmount})`);
+        }
+
+        function sendPayPalRequest(amount) {
+            let mobileNumber = document.getElementById("mobile-number").value.trim();
+
+            if (!mobileNumber.match(/^\d{10}$/)) {
+                alert("Please enter a valid 10-digit mobile number.");
+                return;
+            }
+
+            let paypalRequestLink = `https://www.paypal.com/requestmoney?recipient=${mobileNumber}&amount=${amount}&currency=USD`;
+            window.location.href = paypalRequestLink;
+        }
+
+        window.onload = updatePaymentInfo;
+    </script>
+</head>
+<body>
+    <header>
+        <h1>Complete Your Payment</h1>
+    </header>
+
+    <section class="payment-options">
+        <h2>Select Your Payment Method</h2>
+        
+        <p id="total-amount" style="font-size: 1.2em; font-weight: bold;"></p>
+
+        <!-- PayPal Mobile Payment Section -->
+        <div class="payment-method">
+            <h3>Option 1: PayPal Mobile Request</h3>
+            <p>Enter your mobile number to receive a PayPal request.</p>
+            <label for="mobile-number">Mobile Number:</label>
+            <input type="text" id="mobile-number" placeholder="Enter phone number">
+            <br><br>
+            <button id="paypal-btn">Send PayPal Request</button>
+        </div>
+
+        <!-- UPI (PhonePe / Google Pay) QR Code Section -->
+        <div class="payment-method">
+            <h3>Option 2: Pay via UPI (PhonePe / Google Pay)</h3>
+            <p>Scan this QR code to pay via UPI.</p>
+            <img id="upi-qr" alt="UPI QR Code" width="250">
+            <p>Or click the button below to pay directly:</p>
+            <a id="upi-link" href="#" target="_blank">
+                <button>Pay via UPI</button>
+            </a>
+        </div>
+    </section>
+
+    <footer>
+        <p>&copy; 2025 Urban Collection. All rights reserved.</p>
+    </footer>
+</body>
+</html>

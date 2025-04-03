@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Urban Collection</title>
+    <link rel="stylesheet" href="styles.css">
+    <script>
+        function loginUser(event) {
+            event.preventDefault();
+            let username = document.getElementById("username").value;
+            let password = document.getElementById("password").value;
+
+            // Retrieve stored credentials
+            let storedUsername = localStorage.getItem("username");
+            let storedPassword = localStorage.getItem("password");
+
+            if ((username === "reachgovardhan@gmail.com") && (password === "Haarika")) {
+                sessionStorage.setItem("loggedIn", "true");
+                alert("Login successful!");
+                window.location.href = "portal.html";
+            } else {
+                alert("Invalid username or password!");
+            }
+        }
+
+        function forgotPassword() {
+            let email = prompt("Enter your registered email:");
+
+            if (!email) return;
+
+            // Check if email exists in localStorage
+            let storedEmail = localStorage.getItem("email");
+            if (email === storedEmail||"reachgovardhan@gmail.com") {
+                let newPassword = prompt("Enter your new password:");
+                let confirmNewPassword = prompt("Confirm your new password:");
+
+                if (newPassword && newPassword === confirmNewPassword) {
+                    localStorage.setItem("password", newPassword);
+                    alert("Password reset successfully! You can now log in with your new password.");
+                } else {
+                    alert("Passwords do not match. Try again.");
+                }
+            } else {
+                alert("Email not found! Please try again or sign up.");
+            }
+        }
+    </script>
+</head>
+<body>
+    <section id="login" class="login-section" style="display: flex; justify-content: center; align-items: center; height: 100vh;">
+        <div class="login-box" style="background: white; padding: 20px; border-radius: 8px; box-shadow: 0px 0px 10px rgba(0,0,0,0.1); text-align: center;">
+            <h2>Login</h2>
+            <form onsubmit="loginUser(event)">
+                <label for="username"><b>Username</b></label><br>
+                <input type="text" id="username" name="username" placeholder="Enter your username" required><br><br>
+
+                <label for="password"><b>Password</b></label><br>
+                <input type="password" id="password" name="password" placeholder="Enter your password" required><br><br>
+
+                <button type="submit" style="background:mediumaquamarine ; color: white; padding: 10px 20px; border: none; border-radius: 5px; cursor: pointer;">Login</button>
+                <p><a href="#" onclick="forgotPassword()">Forgot Password?</a></p>
+                <p>Don't have an account? <a href="signup.html">Sign Up</a></p>
+            </form>
+        </div>
+    </section>
+</body>
+</html>
